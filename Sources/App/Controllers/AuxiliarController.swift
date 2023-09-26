@@ -6,7 +6,15 @@ struct AuxiliarController: RouteCollection {
         routes.get("version", use: needsUpdate)
     }
     // MARK: - Routes
-    func needsUpdate(req: Request) async throws -> String {
-        return "La version es 1.0.0"
+    func needsUpdate(req: Request) async throws -> Version {
+
+        guard let currentVersion: String = req.query["current"] else { 
+            throw Abort(.badRequest)
+         }
+
+         let appStoreLiveVersion = "1.0.8"
+         let needsUpdate = currentVersion < appStoreLiveVersion
+
+        return Version(current: currentVersion, live: appStoreLiveVersion , needsUpdate: needsUpdate)
     }
 }
