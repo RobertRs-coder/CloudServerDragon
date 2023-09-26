@@ -17,6 +17,7 @@ public func configure(_ app: Application) async throws {
     // DB connection
     try app.databases.use(.postgres(url: dbURL), as: .psql)
 
+    
     // register routes
     try routes(app)
 }
