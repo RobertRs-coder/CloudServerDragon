@@ -17,6 +17,9 @@ public func configure(_ app: Application) async throws {
     // DB connection
     try app.databases.use(.postgres(url: dbURL), as: .psql)
 
+    // Migrations
+    app.migrations.add(ModelsMigration_v0())
+    try await app.autoMigrate()
     
     // register routes
     try routes(app)
