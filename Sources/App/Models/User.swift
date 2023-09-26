@@ -2,10 +2,14 @@ import Vapor
 import Fluent
 
 final class User: Model {
-    // Schema
+    // Schema - table name
     static var schema = "users"
 
-    // Propierties
+    // Properties
     @ID(key: .id)
     var id: UUID?
+
+    @Timestamp(key: "created_at", on: .create, format: .default)
+    var created_at: Date?
+
 }
