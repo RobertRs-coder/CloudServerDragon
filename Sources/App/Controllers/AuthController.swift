@@ -13,7 +13,9 @@ struct AuthController: RouteCollection {
     // MARK: - Routes
     func signUp(req: Request) async throws -> User.Public {
 
-        let userCreate = try req.content.decode(User.Create.self)
+        // Decode user data
+        var userCreate = try req.content.decode(User.Create.self)
+        userCreate.password = try req.password.hash(userCreate.password)
 
         // Save user to db
         let user = User(name: userCreate.name, email: userCreate.email, password: userCreate.password)

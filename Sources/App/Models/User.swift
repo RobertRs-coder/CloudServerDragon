@@ -38,7 +38,7 @@ extension User {
     struct Create: Content {
         let name: String
         let email: String
-        let password: String
+        var password: String
     }
 
     struct SignIn: Content {
