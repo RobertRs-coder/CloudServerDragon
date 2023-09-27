@@ -35,15 +35,30 @@ final class User: Model, Content{
 // MARK: - User DTO's
 extension User {
 
-    struct Create: Content {
+    struct Create: Content, Validatable {
+        
         let name: String
         let email: String
         var password: String
+        
+        
+        static func validations(_ validations: inout Vapor.Validations) {
+            validations.add("name", as: String.self, is: !.empty, required: true)
+            validations.add("email", as: String.self, is: .email, required: true)
+            validations.add("password", as: String.self, is: .count(6...), required: true)
+        }
     }
 
     struct SignIn: Content {
         let email: String
         let password: String
+
+        
+        static func validations(_ validations: inout Vapor.Validations) {
+            validations.add("email", as: String.self, is: .email, required: true)
+            // For scurity not count anything
+            validations.add("password", as: String.self, is: !.empty, required: true)
+        }
     }
 
     struct Public: Content {
