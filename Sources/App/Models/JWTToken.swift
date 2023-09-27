@@ -16,6 +16,7 @@ enum JWTTokenType: String, Codable {
 struct JWTToken: Content, JWTPayload {
     
     // MARK: - Properties
+    // We can add more fields if we need it as admin
     var exp: ExpirationClaim
     var iss: IssuerClaim
     var sub: SubjectClaim
@@ -50,5 +51,28 @@ extension JWTToken {
         
         let accesToken: String
         let refreshToken: String
+    }
+}
+
+// MARK: Auxiliar
+extension JWTToken {
+    
+    func generateTokens(userID: UUID) -> (access: JWTToken, refresh: JWTToken) {
+        
+        var expDate = Date().addingTimeInterval(Constants.accesTokenLifeTime)
+        let access = JWTToken(
+            exp: .init(value: expDate),
+            iss: .init(value: Environment.process.APP_BUNDLE_ID!),
+            sub: .init(value: userID.uuidString),
+            type: .accessToken)
+        
+        expDate = Date().addingTimeInterval(Constants.refreshTokenLifeTime)
+        let refresh = JWTToken(
+            exp: .init(value: expDate),
+            iss: .init(value: Environment.process.APP_BUNDLE_ID!),
+            sub: .init(value: userID.uuidString),
+            type: .refreshToken)
+        
+        return (access, refresh)
     }
 }
