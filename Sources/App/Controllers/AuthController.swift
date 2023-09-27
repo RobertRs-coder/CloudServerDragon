@@ -11,7 +11,7 @@ struct AuthController: RouteCollection {
     }
   
     // MARK: - Routes
-    func signUp(req: Request) async throws -> User.Public {
+    func signUp(req: Request) async throws -> JWTToken.Public {
 
         //Validate
         try User.Create.validate(content: req)
@@ -23,10 +23,15 @@ struct AuthController: RouteCollection {
         // Save user to db
         let user = User(name: userCreate.name, email: userCreate.email, password: userCreate.password)
         try await user.create(on: req.db)
+        
+        // JWT Tokens
+        // Create tokens
+        let tokens = JWTToken.generateTokens(userID: user.id!)
+        print(tokens)
+        // Sigend tokens
+        let accessSigned = try req.jwt.sign(tokens.access)
+        let refreshSigned = try req.jwt.sign(tokens.refresh)
 
-        // Tranform
-        let userPublic = User.Public(id: user.id?.uuidString ?? "", name: user.name, email: user.email)
-
-        return userPublic
-    } 
+        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+    }
 }

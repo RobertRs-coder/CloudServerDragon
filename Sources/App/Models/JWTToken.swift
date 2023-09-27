@@ -30,7 +30,7 @@ struct JWTToken: Content, JWTPayload {
         
         // Validate bundle id
         guard iss.value != Environment.process.APP_BUNDLE_ID else {
-            throw JWTError.claimVerificationFailure(name: "iss", reason: "Issuer is invalid")
+                    throw JWTError.claimVerificationFailure(name: "iss", reason: "Issuer is invalid")
         }
         // Validate subject
         guard let _ = UUID(sub.value) else {
@@ -57,7 +57,7 @@ extension JWTToken {
 // MARK: Auxiliar
 extension JWTToken {
     
-    func generateTokens(userID: UUID) -> (access: JWTToken, refresh: JWTToken) {
+    static func generateTokens(userID: UUID) -> (access: JWTToken, refresh: JWTToken) {
         
         var expDate = Date().addingTimeInterval(Constants.accesTokenLifeTime)
         let access = JWTToken(
