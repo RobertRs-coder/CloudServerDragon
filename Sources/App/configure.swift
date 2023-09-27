@@ -2,6 +2,7 @@ import NIOSSL
 import Fluent
 import FluentPostgresDriver
 import Vapor
+import JWT
 
 // configures your application
 public func configure(_ app: Application) async throws {
@@ -11,6 +12,9 @@ public func configure(_ app: Application) async throws {
     guard let dbURL = Environment.process.DATABASE_URL else { fatalError("DATABASE_URL not found") }
     guard let _ = Environment.process.APP_BUNDLE_ID else { fatalError("APP_BUNDLE_ID not found") }
 
+    // Configure JWT
+    app.jwt.signers.use(.hs256(key: jwtKey))
+    
     // Configure passwords hashes
     app.passwords.use(.bcrypt)
 
