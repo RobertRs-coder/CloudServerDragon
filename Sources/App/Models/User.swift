@@ -1,7 +1,7 @@
 import Vapor
 import Fluent
 
-final class User: Model, Content{
+final class User: Model, Content {
     // Schema - table name
     static var schema = "users"
 
@@ -65,5 +65,17 @@ extension User {
         let id: String
         let name: String
         let email: String
+    }
+}
+
+// MARK: Authenticable
+extension User: ModelAuthenticatable {
+
+    static var usernameKey = \User.$email
+    static var passwordHashKey = \User.$password
+    
+    func verify(password: String) throws -> Bool {
+        
+        try Bcrypt.verify(password, created: self.password)
     }
 }

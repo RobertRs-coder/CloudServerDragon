@@ -8,6 +8,12 @@ struct AuthController: RouteCollection {
 
             builder.post("signup", use: signUp)
             
+            builder.group(User.authenticator(), User.guardMiddleware()) { builder in
+                
+                builder.get("signin", use: signIn)
+
+            }
+            
             builder.group(JWTToken.authenticator(), JWTToken.guardMiddleware()) { builder in
                 
                 builder.get("refresh", use: refresh)
@@ -29,6 +35,21 @@ struct AuthController: RouteCollection {
         let user = User(name: userCreate.name, email: userCreate.email, password: userCreate.password)
         try await user.create(on: req.db)
         
+        // JWT Tokens
+        // Create tokens
+        let tokens = JWTToken.generateTokens(userID: user.id!)
+        // Sigend tokens
+        let accessSigned = try req.jwt.sign(tokens.access)
+        let refreshSigned = try req.jwt.sign(tokens.refresh)
+
+        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+    }
+    
+    
+    func signIn(req: Request) async throws -> JWTToken.Public {
+        
+        //Get authenticated user
+        let user = try req.auth.require(User.self)
         // JWT Tokens
         // Create tokens
         let tokens = JWTToken.generateTokens(userID: user.id!)

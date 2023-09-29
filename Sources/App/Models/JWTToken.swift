@@ -6,7 +6,7 @@
 //
 
 import Vapor
-import JWT
+@preconcurrency import JWT
 
 enum JWTTokenType: String, Codable {
     case accessToken
