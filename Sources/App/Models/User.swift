@@ -44,7 +44,7 @@ extension User {
         
         static func validations(_ validations: inout Vapor.Validations) {
             validations.add("name", as: String.self, is: !.empty, required: true)
-            validations.add("email", as: String.self, is: .email, required: true)
+            validations.add("email", as: String.self, is: !.empty, required: true)
             validations.add("password", as: String.self, is: .count(6...), required: true)
         }
     }
@@ -55,7 +55,7 @@ extension User {
 
         
         static func validations(_ validations: inout Vapor.Validations) {
-            validations.add("email", as: String.self, is: .email, required: true)
+            validations.add("email", as: String.self, is: !.empty, required: true)
             // For scurity not count anything
             validations.add("password", as: String.self, is: !.empty, required: true)
         }

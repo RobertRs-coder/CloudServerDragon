@@ -7,6 +7,11 @@ struct AuthController: RouteCollection {
         routes.group("auth") { builder in
 
             builder.post("signup", use: signUp)
+            
+            builder.group(JWTToken.authenticator(), JWTToken.guardMiddleware()) { builder in
+                
+                builder.get("refresh", use: refresh)
+            }
         }
     }
   
@@ -27,11 +32,14 @@ struct AuthController: RouteCollection {
         // JWT Tokens
         // Create tokens
         let tokens = JWTToken.generateTokens(userID: user.id!)
-        print(tokens)
         // Sigend tokens
         let accessSigned = try req.jwt.sign(tokens.access)
         let refreshSigned = try req.jwt.sign(tokens.refresh)
 
         return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+    }
+    
+    func refresh(req: Request) async throws -> String {
+        return "Ok"
     }
 }

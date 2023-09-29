@@ -13,7 +13,7 @@ enum JWTTokenType: String, Codable {
     case refreshToken
 }
 
-struct JWTToken: Content, JWTPayload {
+struct JWTToken: Content, JWTPayload, Authenticatable {
     
     // MARK: - Properties
     // We can add more fields if we need it as admin
@@ -23,13 +23,13 @@ struct JWTToken: Content, JWTPayload {
     var type: JWTTokenType
     
     // MARK: - JWTPayload
-    func verify(using signer: JWTKit.JWTSigner) throws {
+    func verify(using signer: JWTSigner) throws {
         
         // Expired
         try exp.verifyNotExpired()
         
         // Validate bundle id
-        guard iss.value != Environment.process.APP_BUNDLE_ID else {
+        guard iss.value == Environment.process.APP_BUNDLE_ID else {
                     throw JWTError.claimVerificationFailure(name: "iss", reason: "Issuer is invalid")
         }
         // Validate subject
