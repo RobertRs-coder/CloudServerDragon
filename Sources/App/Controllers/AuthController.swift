@@ -39,7 +39,30 @@ struct AuthController: RouteCollection {
         return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
     }
     
-    func refresh(req: Request) async throws -> String {
-        return "Ok"
+    func refresh(req: Request) async throws -> JWTToken.Public {
+        
+        //Get refresh token
+        let token = try req.auth.require(JWTToken.self)
+        
+        // Verify type of JWT
+        
+        guard token.type == .refreshToken else {
+            throw Abort(.methodNotAllowed)
+        
+        }
+        
+        // Get user id & search on db
+        guard let user = try await User.find(UUID(token.sub.value), on: req.db) else {
+            throw Abort(.unauthorized)
+        }
+        
+        // JWT Tokens
+        // Create tokens
+        let tokens = JWTToken.generateTokens(userID: user.id!)
+        // Sigend tokens
+        let accessSigned = try req.jwt.sign(tokens.access)
+        let refreshSigned = try req.jwt.sign(tokens.refresh)
+        
+        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
     }
 }
