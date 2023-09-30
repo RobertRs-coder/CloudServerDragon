@@ -3,7 +3,7 @@ import Fluent
 
 struct ModelsMigration_v0: AsyncMigration {
     func prepare(on database: FluentKit.Database) async throws {
-        //
+        //Create tables
         try await database
             .schema(User.schema)
             .id()
@@ -20,15 +20,14 @@ struct ModelsMigration_v0: AsyncMigration {
             .field("created_at", .string)
             .field("title", .string, .required)
             .field("body", .string, .required)
-            .field("imageURL", .string, .required)
+            .field("imageURL", .string)
             .create()
     }
 
     func revert(on database: Database) async throws {
-        //
+        //Delte if problems
         try await database.schema(User.schema).delete()
         try await database.schema(News.schema).delete()
 
     }
-    
 }

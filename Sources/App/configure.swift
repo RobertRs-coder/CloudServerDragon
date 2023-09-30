@@ -26,6 +26,7 @@ public func configure(_ app: Application) async throws {
 
     // Migrations
     app.migrations.add(ModelsMigration_v0())
+    app.migrations.add(PopulateInitialData())
     try await app.autoMigrate()
     
     // register routes

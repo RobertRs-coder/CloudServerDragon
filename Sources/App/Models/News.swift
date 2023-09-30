@@ -9,6 +9,14 @@ import Vapor
 import Fluent
 
 final class News: Model, Content {
+    internal init(id: UUID? = nil, createdAt: Date? = nil, title: String, body: String, imageURL: String? = nil) {
+        self.id = id
+        self.createdAt = createdAt
+        self.title = title
+        self.body = body
+        self.imageURL = imageURL
+    }
+    
     // Schema - table news
     static var schema = "news"
 
@@ -25,7 +33,7 @@ final class News: Model, Content {
     @Field(key: "body")
     var body: String
 
-    @Field(key: "image")
+    @Field(key: "imageURL")
     var imageURL: String?
 
     // Init  - mandatory
@@ -37,7 +45,6 @@ final class News: Model, Content {
         self.body = body
         self.imageURL = imageURL
     }
-
 }
 // MARK: - User DTO's
 extension News {
