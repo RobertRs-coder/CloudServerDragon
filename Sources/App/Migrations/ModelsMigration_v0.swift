@@ -22,12 +22,33 @@ struct ModelsMigration_v0: AsyncMigration {
             .field("body", .string, .required)
             .field("imageURL", .string)
             .create()
+        
+        try await database
+            .schema(Character.schema)
+            .id()
+            .field("name", .string, .required)
+            .create()
+        
+        try await database
+            .schema(Episode.schema)
+            .id()
+            .field("created_at", .string)
+            .field("episode_number", .string, .required)
+            .field("title", .string, .required)
+            .field("aired_at", .string)
+            .field("summary", .string, .required)
+            .field("imageURL", .string)
+            .create()
     }
-
+    
     func revert(on database: Database) async throws {
-        //Delte if problems
+        //Delete if problems
         try await database.schema(User.schema).delete()
         try await database.schema(News.schema).delete()
+        try await database.schema(Character.schema).delete()
+        try await database.schema(Episode.schema).delete()
+
+
 
     }
 }
