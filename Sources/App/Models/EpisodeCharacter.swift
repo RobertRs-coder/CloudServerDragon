@@ -1,5 +1,5 @@
 //
-//  Episode+Character.swift
+//  EpisodeCharacter.swift
 //
 //
 //  Created by Roberto Rojo Sahuquillo on 2/10/23.
@@ -8,19 +8,19 @@
 import Vapor
 import Fluent
 
-final class CharacterEpisode: Model {
+final class EpisodeCharacter: Model {
     // Name of the table or collection.
-    static let schema = "character+episode"
+    static let schema = "episode+character"
     
     // Properties
     @ID(key: .id)
     var id: UUID?
     
-    @Parent(key: "character_id")
-    var character: Character
-    
     @Parent(key: "episode_id")
     var episode: Episode
+    
+    @Parent(key: "character_id")
+    var character: Character
     
     init() { }
     
@@ -34,7 +34,8 @@ final class CharacterEpisode: Model {
     //Class
     init(id: UUID? = nil, character: Character, episode: Episode) throws {
         self.id = id
-        self.$character.id = try character.requireID()
         self.$episode.id =  try episode.requireID()
+        self.$character.id = try character.requireID()
+
     }
 }

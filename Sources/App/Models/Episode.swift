@@ -27,7 +27,7 @@ final class Episode: Model {
     var summary: String
     @OptionalField(key: "imageURL")
     var imageURL: String?
-    @Siblings(through: CharacterEpisode.self, from: \.$episode, to: \.$character)
+    @Siblings(through: EpisodeCharacter.self, from: \.$episode, to: \.$character)
     var characters: [Character]
     
     init() { }

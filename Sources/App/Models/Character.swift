@@ -19,7 +19,7 @@ final class Character: Model {
     @Field(key: "name")
     var name: String
 
-    @Siblings(through: CharacterEpisode.self, from: \.$character, to: \.$episode)
+    @Siblings(through: EpisodeCharacter.self, from: \.$character, to: \.$episode)
     var episodes: [Episode]
 
     // Creates a new, empty User -> Always need it

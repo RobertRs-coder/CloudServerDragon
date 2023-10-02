@@ -63,30 +63,31 @@ struct PopulateInitialData: AsyncMigration {
             }
         }
         
-        //MARK: - Character+Episode
-        try await chiChi.$episodes.attach([episode195, episode199], on: database)
-        try await goku.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
-        try await granjero.$episodes.attach([episode195], on: database)
-        try await raditz.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
-        try await gohan.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
-        try await piccolo.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
-        try await milk.$episodes.attach([episode196, episode197], on: database)
-        try await krilin.$episodes.attach([episode196, episode197, episode198, episode199], on: database)
+//        //MARK: - Character+Episode
+//        try await chiChi.$episodes.attach([episode195, episode199], on: database)
+//        try await goku.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
+//        try await granjero.$episodes.attach([episode195], on: database)
+//        try await raditz.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
+//        try await gohan.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
+//        try await piccolo.$episodes.attach([episode195, episode196, episode197, episode198, episode199], on: database)
+//        try await milk.$episodes.attach([episode196, episode197], on: database)
+//        try await krilin.$episodes.attach([episode196, episode197, episode198, episode199], on: database)
 
-//        //MARK: - Episode+Character
-//        try await episode195.$characters.attach([chiChi, goku, granjero, raditz, gohan, piccolo], on: database)
-//        try await episode196.$characters.attach([milk, goku, piccolo, raditz, krilin, gohan], on: database)
-//        try await episode197.$characters.attach([gohan, piccolo, goku, krilin, raditz, milk], on: database)
-//        try await episode198.$characters.attach([gohan, goku, piccolo, raditz, krilin], on: database)
-//        try await episode199.$characters.attach([raditz, gohan, piccolo, goku, chiChi, krilin], on: database)
+        //MARK: - Episode+Character
+        try await episode195.$characters.attach([chiChi, goku, granjero, raditz, gohan, piccolo], on: database)
+        try await episode196.$characters.attach([milk, goku, piccolo, raditz, krilin, gohan], on: database)
+        try await episode197.$characters.attach([gohan, piccolo, goku, krilin, raditz, milk], on: database)
+        try await episode198.$characters.attach([gohan, goku, piccolo, raditz, krilin], on: database)
+        try await episode199.$characters.attach([raditz, gohan, piccolo, goku, chiChi, krilin], on: database)
         
     }
 
     func revert(on database: Database) async throws {
         
         try await News.query(on: database).delete()
+        try await Episode.query(on: database).delete()
         try await Character.query(on: database).delete()
-        try await CharacterEpisode.query(on: database).delete()
+        try await EpisodeCharacter.query(on: database).delete()
         
     }
     

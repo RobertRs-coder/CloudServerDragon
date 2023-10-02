@@ -13,17 +13,17 @@ struct ModelsMigration_v2: AsyncMigration {
     func prepare(on database: FluentKit.Database) async throws {
         
         try await database
-            .schema(CharacterEpisode.schema)
+            .schema(EpisodeCharacter.schema)
             .id()
-            .field("character_id", .uuid, .required, .references(Character.schema, "id"))
             .field("episode_id", .uuid, .required, .references(Episode.schema, "id"))
+            .field("character_id", .uuid, .required, .references(Character.schema, "id"))
             .create()
         
     }
     
     func revert(on database: FluentKit.Database) async throws {
         
-        try await database.schema(CharacterEpisode.schema).delete()
+        try await database.schema(EpisodeCharacter.schema).delete()
         
     }
 }
