@@ -19,6 +19,9 @@ final class Character: Model, Content {
     @Field(key: "name")
     var name: String
     
+    @Siblings(through: EpisodeCharacter.self, from: \.$character, to: \.$episode)
+    public var episodes: [Episode]
+    
     // Init  - mandatory
     init() { }
     

@@ -39,6 +39,14 @@ struct ModelsMigration_v0: AsyncMigration {
             .field("summary", .string, .required)
             .field("imageURL", .string)
             .create()
+        
+        try await database
+            .schema(EpisodeCharacter.schema)
+            .id()
+            .field("episode_id", .uuid, .required, .references(Episode.schema, "id"))
+            .field("character_id", .uuid, .required, .references(Character.schema, "id"))
+            .create()
+        
     }
     
     func revert(on database: Database) async throws {
@@ -47,6 +55,8 @@ struct ModelsMigration_v0: AsyncMigration {
         try await database.schema(News.schema).delete()
         try await database.schema(Character.schema).delete()
         try await database.schema(Episode.schema).delete()
+        try await database.schema(EpisodeCharacter.schema).delete()
+
 
 
 

@@ -36,6 +36,9 @@ final class Episode: Model, Content {
     @OptionalField(key: "imageURL")
     var imageURL: String?
     
+    @Siblings(through: EpisodeCharacter.self, from: \.$episode, to: \.$character)
+    public var characters: [Character]
+    
     // Init  - mandatory
     init() { }
     
