@@ -16,30 +16,57 @@ struct EpisodesController: RouteCollection {
         routes.group(JWTToken.authenticator(), JWTToken.guardMiddleware()){ builder in
             
             builder.get("episodes", use: allEpisodes)
-            builder.get9("episodes", ":id", use: episode)
+            builder.get("episodes", ":id", use: getEpisodeByID)
         
         }
     }
     
     //MARK: - Routes
-    func allEpisodes(request: Request) async throws -> [Episode.Public] {
+    func allEpisodes(request: Request) async throws -> [Episode.List] {
         
-        try await Episode.query(on: request.db).with(\.$characters).all().map {
+        
+//        // Eager Loading with relations
+//        try await Episode.query(on: request.db).with(\.$characters).all().map {
+//            
+//            Episode.Public(id: $0.id, 
+//                           episodeNumber: $0.episodeNumber,
+//                           title: $0.title, 
+//                           airedAt: $0.airedAt,
+//                           summary: $0.summary, 
+//                           imageURL: $0.imageURL,
+//                           characters: $0.characters)
+//        }
+        
+        // All necessary data
+        try await Episode.query(on: request.db).all().map {
             
-            Episode.Public(id: $0.id, episodeNumber: $0.episodeNumber, title: $0.title, airedAt: $0.airedAt, summary: $0.summary, imageURL: $0.imageURL, characters: $0.characters)
-            
+            Episode.List(id: $0.id,
+                         episodeNumber: $0.episodeNumber,
+                         title: $0.title,
+                         imageURL: $0.imageURL)
         }
+
     }
     
-    func getNewsByID(req: Request) async throws -> Episode.Public {
+    func getEpisodeByID(req: Request) async throws -> Episode.Public {
+        
         let id = req.parameters.get("id", as: UUID.self)
         
         guard let episode  = try await Episode.find(id, on: req.db) else {
             throw Abort(.notFound)
         }
-        try await episode.$characters.load(on: req.db)
         
-        return Episdoe.Public(
+//        // Lazy Eager Loading
+//        try await episode.$characters.load(on: req.db)
+        
+        
+        return Episode.Public(id: episode.id,
+                              episodeNumber: episode.episodeNumber,
+                              title: episode.title,
+                              airedAt: episode.airedAt,
+                              summary: episode.summary,
+                              imageURL: episode.imageURL,
+                              characters: episode.characters)
     }
     
 }

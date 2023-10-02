@@ -28,6 +28,7 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(ModelsMigration_v0())
     app.migrations.add(ModelsMigration_v1())
     app.migrations.add(ModelsMigration_v2())
+    app.migrations.add(ModelsMigration_v3())
     app.migrations.add(PopulateInitialData())
     try await app.autoMigrate()
     

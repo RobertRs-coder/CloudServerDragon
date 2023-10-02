@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  JWTToken.swift
+//
 //
 //  Created by Roberto Rojo Sahuquillo on 27/9/23.
 //
@@ -49,7 +49,7 @@ extension JWTToken {
     
     struct Public: Content {
         
-        let accesToken: String
+        let accessToken: String
         let refreshToken: String
     }
 }

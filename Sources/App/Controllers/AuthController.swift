@@ -42,7 +42,7 @@ struct AuthController: RouteCollection {
         let accessSigned = try req.jwt.sign(tokens.access)
         let refreshSigned = try req.jwt.sign(tokens.refresh)
 
-        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+        return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
     }
     
     
@@ -57,7 +57,7 @@ struct AuthController: RouteCollection {
         let accessSigned = try req.jwt.sign(tokens.access)
         let refreshSigned = try req.jwt.sign(tokens.refresh)
 
-        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+        return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
     }
     
     func refresh(req: Request) async throws -> JWTToken.Public {
@@ -84,6 +84,6 @@ struct AuthController: RouteCollection {
         let accessSigned = try req.jwt.sign(tokens.access)
         let refreshSigned = try req.jwt.sign(tokens.refresh)
         
-        return JWTToken.Public(accesToken: accessSigned, refreshToken: refreshSigned)
+        return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
     }
 }
