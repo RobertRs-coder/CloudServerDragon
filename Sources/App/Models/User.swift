@@ -1,9 +1,9 @@
 import Vapor
 import Fluent
 
-final class User: Model, Content {
+final class User: Model {
     // Schema - table name
-    static var schema = "users"
+    static let schema = "users"
 
     // Properties
     @ID(key: .id)
