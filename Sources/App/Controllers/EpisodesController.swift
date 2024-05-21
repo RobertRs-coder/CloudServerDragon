@@ -56,8 +56,8 @@ struct EpisodesController: RouteCollection {
             throw Abort(.notFound)
         }
         
-//        // Lazy Eager Loading
-//        try await episode.$characters.load(on: req.db)
+        // Lazy Eager Loading¶
+        try await episode.$characters.load(on: req.db)
         
         
         return Episode.Public(id: episode.id,

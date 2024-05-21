@@ -91,6 +91,8 @@ struct PopulateInitialData: AsyncMigration {
 
     func revert(on database: Database) async throws {
         
+        try await News.query(on: database).delete()
+        try await Episode.query(on: database).delete()
         try await Character.query(on: database).delete()
         try await News.query(on: database).delete()
         try await Episode.query(on: database).delete()
